@@ -43,6 +43,11 @@ function draw() {
 
 }
 
+function mousePressed() {
+  userStartAudio(); 
+  BirdJump(birdBody);
+}
+
 function keyPressed() {
   userStartAudio();
 
