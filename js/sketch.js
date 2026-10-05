@@ -12,7 +12,10 @@ let birdImg;
 async function setup() {
   createCanvas(400, 800);
 
-  birdImg = await loadImage('assets/Objetcts/yellowbird-midflap.png');
+  birdImg = await loadImage('assets/Objetcts/yellowbird-upflap.png');
+  birdImg1 = await loadImage('assets/Objetcts/yellowbird-midflap.png');
+  birdImg2 = await loadImage('assets/Objetcts/yellowbird-downflap.png');
+  
 
   engine = Matter.Engine.create();
   world = engine.world;
@@ -31,5 +34,12 @@ function draw() {
 
   Matter.Engine.update(engine, FIXED_DELTA);
 
-  drawBird(birdBody, birdImg);
+  drawBird(birdBody, [birdImg, birdImg1, birdImg2]);
+
+}
+
+function keyPressed() {
+  if (key === ' ') {
+    BirdJump(birdBody);
+  }
 }
