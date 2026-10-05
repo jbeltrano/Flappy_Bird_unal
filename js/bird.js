@@ -1,28 +1,27 @@
 const BIRD_WIDTH = 34;
 const BIRD_HEIGHT = 24;
 const BIRD_JUMP_VELOCITY = -8;
-const WINGSOUND = 0;
+const BIRD_START_X = 120;
+const BIRD_START_Y = 250;
 
-
-let totalImages = 3; 
+let totalImages = 3;
 let fotogramaActual = 0;
 let velocidadCambioFotograma = 8;
 let birdAngle = 0;
 let animatedImages;
-let birdSounds;
 
-function createBird(x, y, images, sounds) {
+function createBird(x, y, images) {
 
-  animatedImages = images; 
-  birdSounds= sounds 
+  animatedImages = images;
   return Matter.Bodies.rectangle(x, y, BIRD_WIDTH, BIRD_HEIGHT, {
     restitution: 0,
+    inertia: Infinity,
     label: 'bird'
   });
 
 }
 
-function drawBird(body) {
+function drawBird(body, animate = true) {
   imageMode(CENTER);
 
   BirdRotate(body);
@@ -36,21 +35,22 @@ function drawBird(body) {
 
   pop();
 
-  if (frameCount % velocidadCambioFotograma === 0) {
+  if (animate && frameCount % velocidadCambioFotograma === 0) {
     fotogramaActual = (fotogramaActual + 1) % totalImages;
   }
 }
 
 
 function BirdReset(body) {
-  Matter.Body.setPosition(body, { x: 120, y: 300})
+  Matter.Body.setPosition(body, { x: BIRD_START_X, y: BIRD_START_Y })
   Matter.Body.setVelocity(body, { x: 0, y: 0})
+  birdAngle = 0;
 }
 
 function BirdJump(body) {
-  
+
   Matter.Body.setVelocity(body, { x: 0, y: BIRD_JUMP_VELOCITY});
-  birdSounds[WINGSOUND].play()
+  playSfx('wing');
 }
 
 function BirdRotate(body) {
