@@ -1,7 +1,22 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
 }
+
+body, main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 canvas {
   display: block;
+  image-rendering: pixelated;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
 }
