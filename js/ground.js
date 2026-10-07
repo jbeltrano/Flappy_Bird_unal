@@ -3,7 +3,6 @@ const GROUND_SCALE = BG_SCALE;
 const GROUND_TILE_WIDTH = 336 * GROUND_SCALE;
 const GROUND_HEIGHT = 112 * GROUND_SCALE;
 const GROUND_TOP = 800 - GROUND_HEIGHT;
-const GROUND_SPEED = 2;
 
 // el cuerpo físico es más grueso que el sprite para que el pájaro no lo atraviese
 const GROUND_BODY_HEIGHT = 200;
@@ -19,7 +18,7 @@ function createGround() {
 }
 
 function updateGround() {
-  groundOffset = (groundOffset + GROUND_SPEED) % GROUND_TILE_WIDTH;
+  groundOffset = (groundOffset + getSceneSpeed()) % GROUND_TILE_WIDTH;
 }
 
 function drawGround() {

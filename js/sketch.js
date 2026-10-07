@@ -18,6 +18,7 @@ let gameOverImg;
 let gameState = STATE_READY;
 let gameOverAt = 0;
 let dieTimer;
+let score = 0;
 
 async function setup() {
   createCanvas(400, 800);
@@ -28,6 +29,7 @@ async function setup() {
   const birdImg2 = await loadImage('assets/Objetcts/yellowbird-downflap.png');
   bgImg = await loadImage('assets/Objetcts/background-day.png');
   baseImg = await loadImage('assets/Objetcts/base.png');
+  pipeImg = await loadImage('assets/Objetcts/pipe-green.png');
   messageImg = await loadImage('assets/UI/message.png');
   gameOverImg = await loadImage('assets/UI/gameover.png');
 
@@ -38,13 +40,22 @@ async function setup() {
 
   birdBody = createBird(BIRD_START_X, BIRD_START_Y, [birdImg, birdImg1, birdImg2]);
   groundBody = createGround();
+  pipePair = createPipePair();
 
-  Matter.Composite.add(world, [birdBody, groundBody]);
+  Matter.Composite.add(world, [
+    birdBody,
+    groundBody,
+    pipePair.topBody,
+    pipePair.bottomBody
+  ]);
 
   Matter.Events.on(engine, 'collisionStart', (event) => {
     for (const pair of event.pairs) {
       const labels = [pair.bodyA.label, pair.bodyB.label];
-      if (labels.includes('bird') && labels.includes('ground')) {
+      if (
+        labels.includes('bird') &&
+        (labels.includes('ground') || labels.includes('pipe'))
+      ) {
         endGame();
       }
     }
@@ -69,13 +80,30 @@ function draw() {
     Matter.Body.setVelocity(birdBody, { x: 0, y: 0 });
   }
 
+  updatePipes();
+
   if (gameState !== STATE_GAMEOVER) {
     updateGround();
   }
 
   drawBird(birdBody, gameState !== STATE_GAMEOVER);
+  drawPipes();
   drawGround();
+  drawScore();
   drawOverlay();
+}
+
+function drawScore() {
+  push();
+  rectMode(CORNER);
+  textAlign(RIGHT, CENTER);
+  textSize(20);
+  fill(0);
+  noStroke();
+  rect(width - 125, 10, 115, 40);
+  fill(255);
+  text(`Score: ${score}`, width - 18, 30);
+  pop();
 }
 
 function drawOverlay() {
@@ -93,7 +121,9 @@ function startReady() {
   clearTimeout(dieTimer);
   gameState = STATE_READY;
   engine.gravity.scale = 0;
+  score = 0;
   BirdReset(birdBody);
+  resetPipes();
 }
 
 function startPlaying() {
