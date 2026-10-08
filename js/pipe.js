@@ -80,6 +80,7 @@ function updatePipes() {
     pipePassedBird = true;
     pipesPassed += 1;
     score += 5;
+    playSfx("point")
 
     if (pipesPassed % 2 === 0) {
       sceneSpeed *= PIPE_SPEED_INCREASE;
