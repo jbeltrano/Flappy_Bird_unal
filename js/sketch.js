@@ -21,8 +21,7 @@ let dieTimer;
 let score = 0;
 
 async function setup() {
-  createCanvas(WORLD_WIDTH, WORLD_HEIGHT);
-  scaler.apply();
+  createCanvas(400, 800);
   noSmooth();
 
   const birdImg = await loadImage('assets/Objetcts/yellowbird-upflap.png');
@@ -87,10 +86,13 @@ function draw() {
     updateGround();
   }
 
+  if(gameState !== STATE_READY){
+    drawScore();
+  }
+
   drawBird(birdBody, gameState !== STATE_GAMEOVER);
   drawPipes();
   drawGround();
-  drawScore();
   drawOverlay();
 }
 
@@ -165,8 +167,4 @@ function keyPressed() {
     handleInput();
     return false;
   }
-}
-
-function windowResized() {
-  scaler.apply();
 }
