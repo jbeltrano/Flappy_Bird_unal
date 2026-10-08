@@ -1,6 +1,6 @@
 const BIRD_WIDTH = 34;
 const BIRD_HEIGHT = 24;
-const BIRD_JUMP_VELOCITY = -8;
+const BIRD_JUMP_VELOCITY = -7;
 const BIRD_START_X = 120;
 const BIRD_START_Y = 250;
 

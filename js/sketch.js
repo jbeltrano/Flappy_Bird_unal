@@ -20,11 +20,20 @@ let gameOverAt = 0;
 let dieTimer;
 let score = 0;
 
+let numbers = []
+
+async function loadNumbers(){
+  for(let i = 0; i < 10; i++){
+    numbers[i] = await loadImage('assets/UI/Numbers/' + i + '.png');
+  }
+}
+
 async function setup() {
   createCanvas(WORLD_WIDTH, WORLD_HEIGHT);
   scaler.apply();
   noSmooth();
 
+  await loadNumbers();
   const birdImg = await loadImage('assets/Objetcts/yellowbird-upflap.png');
   const birdImg1 = await loadImage('assets/Objetcts/yellowbird-midflap.png');
   const birdImg2 = await loadImage('assets/Objetcts/yellowbird-downflap.png');
@@ -33,6 +42,7 @@ async function setup() {
   pipeImg = await loadImage('assets/Objetcts/pipe-green.png');
   messageImg = await loadImage('assets/UI/message.png');
   gameOverImg = await loadImage('assets/UI/gameover.png');
+
 
   await loadSounds();
 
@@ -100,16 +110,27 @@ function draw() {
 }
 
 function drawScore() {
+
+  let actual = [];
+  let score_aux = score;
+
+  while(true){
+    if(score_aux <= 0){
+      break;
+    }
+
+    actual.push(score_aux % 10);
+    score_aux = floor(score_aux / 10);
+
+  }
+
   push();
-  rectMode(CORNER);
-  textAlign(RIGHT, CENTER);
-  textSize(20);
-  fill(0);
-  noStroke();
-  rect(width - 125, 10, 115, 40);
-  fill(255);
-  text(`Score: ${score}`, width - 18, 30);
+  translate(width - 30, 0);
+  for(let i = 0; i < actual.length; i++){
+    image(numbers[actual[i]], -i*25,30);
+  }
   pop();
+  
 }
 
 function drawOverlay() {
